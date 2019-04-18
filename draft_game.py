@@ -1,13 +1,10 @@
 from collections import defaultdict
 from random import randrange
 
-NB_CARDS = 50
+import settings
 
 
 class Card(object):
-    RED_MAX = 10
-    SUM_MAX = 15
-
     def __init__(self, red, blue):
         self.red = red
         self.blue = blue
@@ -29,8 +26,8 @@ class Card(object):
     @classmethod
     def generate(cls):
         """Generate a random card according to the class constraints."""
-        red = randrange(cls.RED_MAX + 1)
-        blue = randrange(cls.RED_MAX - red, cls.SUM_MAX - red + 1)
+        red = randrange(settings.RED_MAX + 1)
+        blue = randrange(settings.RED_MAX - red, settings.SUM_MAX - red + 1)
         return cls(red, blue)
 
 
@@ -68,7 +65,7 @@ class CardCollection(object):
     @classmethod
     def generate(cls, nb_cards=None):
         if nb_cards is None:
-            nb_cards = NB_CARDS
+            nb_cards = settings.NB_CARDS
 
         return cls.from_cards(Card.generate() for _ in xrange(nb_cards))
 
