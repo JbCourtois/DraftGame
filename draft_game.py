@@ -68,7 +68,7 @@ class CardCollection(object):
         if nb_cards is None:
             nb_cards = settings.NB_CARDS
 
-        return cls.from_cards(Card.generate() for _ in xrange(nb_cards))
+        return cls.from_cards(Card.generate() for _ in range(nb_cards))
 
     def add_card(self, card):
         """Give an ID to a card and add it to the collection."""
@@ -87,10 +87,10 @@ class CardCollection(object):
         first by total value, then by value for active player.
         """
         collection = defaultdict(list)
-        for idcard in self.idcards.itervalues():
+        for idcard in self.idcards.values():
             collection[idcard.card.sum].append(idcard)
 
-        result = collection.items()
+        result = list(collection.items())
         result.sort()
 
         return [self.sorted_line(line) for _, line in result]
