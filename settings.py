@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 NB_CARDS = 50
 
 RED_MAX = 10
