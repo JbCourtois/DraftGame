@@ -78,6 +78,12 @@ class CardCollection(object):
         self.idcards[auto_id] = IdCard(auto_id, card)
         self._auto_id += 1
 
+    @staticmethod
+    def sorted_line(line, active_red=True):
+        """Sort a row of cards in-place and return it."""
+        line.sort(key=lambda idcard: idcard.card.value(active_red=active_red))
+        return line
+
     def sorted(self, active_red=True):
         """Provide a 2D sorted representation of the cards,
         first by total value, then by value for active player.
@@ -89,7 +95,4 @@ class CardCollection(object):
         result = collection.items()
         result.sort()
 
-        for _, line in result:
-            line.sort(key=lambda idcard: idcard.card.value(active_red=active_red))
-
-        return result
+        return [self.sorted_line(line) for _, line in result]
