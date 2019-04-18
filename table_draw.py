@@ -6,7 +6,7 @@ sys.stdout = codecs.getwriter('utf-8')(sys.stdout.detach())
 
 
 class TableDraw(object):
-    JOINERS = {
+    JOINERS_OLD = {
         (True, True, True, True): '┼',
         (True, True, True, False): '┤',
         (True, True, False, True): '├',
@@ -19,6 +19,22 @@ class TableDraw(object):
         (False, True, False, True): '┌',
         (False, False, True, True): '─',
     }
+    JOINERS = {
+        (True, True, True, True): '╬',
+        (True, True, True, False): '╣',
+        (True, True, False, True): '╠',
+        (True, True, False, False): '║',
+        (True, False, True, True): '╩',
+        (True, False, True, False): '╝',
+        (True, False, False, True): '╚',
+        (False, True, True, True): '╦',
+        (False, True, True, False): '╗',
+        (False, True, False, True): '╔',
+        (False, False, True, True): '═',
+    }
+
+    HORIZONTAL = JOINERS[(False, False, True, True)]
+    VERTICAL = JOINERS[(True, True, False, False)]
 
     def fill_joiner_char(self, up=True, down=True, left=True, right=True):
         return self.JOINERS[(up, down, left, right)]
@@ -27,7 +43,7 @@ class TableDraw(object):
 class CollectionDraw(TableDraw):
     """Tool to pretty-print a CardCollection."""
     CARD_WIDTH = 8
-    BORDER = '─' * CARD_WIDTH
+    BORDER = TableDraw.HORIZONTAL * CARD_WIDTH
 
     def __init__(self, collection, active_red=True):
         table = collection.sorted(active_red=active_red)
@@ -77,7 +93,7 @@ class CollectionDraw(TableDraw):
         result.extend(self.adjust_spaces(text) for text in line)
         result.append('')
 
-        return '│'.join(result)
+        return self.VERTICAL.join(result)
 
     def format_row(self, r_index):
         row = self.rows[r_index]
