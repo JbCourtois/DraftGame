@@ -93,7 +93,3 @@ class CardCollection(object):
             line.sort(key=lambda idcard: idcard.card.value(active_red=active_red))
 
         return result
-
-
-coll = CardCollection.generate()
-coll.sorted()
