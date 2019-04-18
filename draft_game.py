@@ -12,8 +12,15 @@ class Card(object):
         self.red = red
         self.blue = blue
 
+    @property
+    def partial_repr(self):
+        return '({}, {})'.format(self.red, self.blue)
+
     def __repr__(self):
-        return 'Card({}, {})'.format(self.red, self.blue)
+        return 'Card{}'.format(self.partial_repr)
+
+    def value(self, active_red=True):
+        return self.red if active_red else self.blue
 
     @property
     def sum(self):
@@ -26,17 +33,14 @@ class Card(object):
         blue = randrange(cls.RED_MAX - red, cls.SUM_MAX - red + 1)
         return cls(red, blue)
 
-    @staticmethod
-    def cmp(cx, cy, active_red=True):
-        """Compare two cards by value for the active player."""
-        active = 'red' if active_red else 'blue'
-        return cmp(getattr(cx, active), getattr(cy, active))
-
 
 class IdCard(object):
     def __init__(self, uid, card):
         self.id = uid
         self.card = card
+
+    def __repr__(self):
+        return 'Card #{} {}'.format(self.id, self.card.partial_repr)
 
     @property
     def text(self):
@@ -85,9 +89,8 @@ class CardCollection(object):
         result = collection.items()
         result.sort()
 
-        active = 'red' if active_red else 'blue'
         for _, line in result:
-            line.sort(key=lambda idcard: getattr(idcard.card, active))
+            line.sort(key=lambda idcard: idcard.card.value(active_red=active_red))
 
         return result
 
