@@ -93,7 +93,10 @@ class CardCollection(object):
     @staticmethod
     def sorted_line(line, active_red=True):
         """Sort a row of cards in-place and return it."""
-        line.sort(key=lambda idcard: idcard.card.value(active_red=active_red))
+        line.sort(
+            key=lambda idcard: idcard.card.value(active_red=active_red),
+            reverse=True,
+        )
         return line
 
     def sorted(self, active_red=True):
@@ -105,6 +108,6 @@ class CardCollection(object):
             collection[idcard.card.sum].append(idcard)
 
         result = list(collection.items())
-        result.sort()
+        result.sort(reverse=True)
 
         return [self.sorted_line(line) for _, line in result]
