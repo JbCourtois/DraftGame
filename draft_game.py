@@ -10,26 +10,40 @@ class Card(object):
         self.red = red
         self.blue = blue
 
-    @property
-    def partial_repr(self):
-        return '({}, {})'.format(self.red, self.blue)
-
-    def __repr__(self):
-        return 'Card{}'.format(self.partial_repr)
-
-    def value(self, active_red=True):
-        return self.red if active_red else self.blue
-
-    @property
-    def sum(self):
-        return self.red + self.blue
-
     @classmethod
     def generate(cls):
         """Generate a random card according to the class constraints."""
         red = randrange(settings.RED_MAX + 1)
         blue = randrange(settings.RED_MAX - red, settings.SUM_MAX - red + 1)
         return cls(red, blue)
+
+    def value(self, active_red=True):
+        return self.red if active_red else self.blue
+
+    def dominates(self, card2, active_red=True):
+        """Sometimes a card is strictly better than another,
+        independently of the rest of the position.
+        This method x.dominates(y) detects some cases where x is better than y.
+        """
+        v_self = self.value(active_red=active_red)
+        v_2 = card2.value(active_red=active_red)
+        if v_self < v_2:
+            return False
+        if self.sum < card2.sum:
+            return False
+
+        return (self.red, self.blue) != (card2.red, card2.blue)
+
+    @property
+    def sum(self):
+        return self.red + self.blue
+
+    @property
+    def partial_repr(self):
+        return '({}, {})'.format(self.red, self.blue)
+
+    def __repr__(self):
+        return 'Card{}'.format(self.partial_repr)
 
 
 class IdCard(object):
