@@ -26,14 +26,11 @@ class Card(object):
         independently of the rest of the position.
         This method x.dominates(y) detects some cases where x is better than y.
         """
-        v_self = self.value(active_red=active_red)
-        v_2 = card2.value(active_red=active_red)
-        if v_self < v_2:
-            return False
-        if self.sum < card2.sum:
-            return False
-
-        return (self.red, self.blue) != (card2.red, card2.blue)
+        return (
+            self.value(active_red=active_red) >= card2.value(active_red=active_red)
+            and self.sum >= card2.sum
+            and (self.red, self.blue) != (card2.red, card2.blue)
+        )
 
     @property
     def partial_repr(self):
@@ -89,7 +86,9 @@ class CardCollection(object):
 
     @staticmethod
     def sorted_line(line, active_red=True):
-        """Sort a row of cards in-place and return it."""
+        """Sort a row of cards in-place and return it.
+        Key is value for active player.
+        """
         line.sort(
             key=lambda idcard: idcard.card.value(active_red=active_red),
             reverse=True,
@@ -100,11 +99,14 @@ class CardCollection(object):
         """Provide a 2D sorted representation of the cards,
         first by total value, then by value for active player.
         """
+        # Group cards by total value
         collection = defaultdict(list)
         for idcard in self.idcards.values():
             collection[idcard.card.sum].append(idcard)
 
+        # Sort rows
         result = list(collection.items())
         result.sort(reverse=True)
 
+        # Sort colums
         return [self.sorted_line(line) for _, line in result]
