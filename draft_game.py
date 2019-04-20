@@ -9,6 +9,7 @@ class Card(object):
     def __init__(self, red, blue):
         self.red = red
         self.blue = blue
+        self.sum = red + blue
 
     @classmethod
     def generate(cls):
@@ -33,10 +34,6 @@ class Card(object):
             return False
 
         return (self.red, self.blue) != (card2.red, card2.blue)
-
-    @property
-    def sum(self):
-        return self.red + self.blue
 
     @property
     def partial_repr(self):
