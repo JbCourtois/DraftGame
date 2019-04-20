@@ -63,6 +63,9 @@ class CardCollection(object):
         self._auto_id = 1
         self.idcards = {}
 
+    def __len__(self):
+        return len(self.idcards)
+
     @classmethod
     def from_cards(cls, cards):
         collection = cls()

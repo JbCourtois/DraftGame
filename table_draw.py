@@ -1,10 +1,4 @@
 # -*- coding: utf-8 -*-
-import codecs
-import sys
-
-sys.stdout = codecs.getwriter('utf-8')(sys.stdout.detach())
-
-
 class TableDraw(object):
     JOINERS_OLD = {
         (True, True, True, True): '┼',
