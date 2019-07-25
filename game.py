@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import codecs
 import sys
+from typing import Optional
 
 from draft_game import CardCollection
 from table_draw import CollectionDraw
@@ -90,7 +91,7 @@ class Game(object):
         print('AI passes.')
         print()
 
-    def player_pick(self):
+    def player_pick(self) -> Optional[int]:
         idcard = self.player_ask_pick()
         print()
         if self.player_confirm(idcard):
@@ -98,6 +99,7 @@ class Game(object):
             return idcard.id
 
     def player_ask_pick(self):
+        """Prompt player to pick a card ; return the picked card."""
         while True:
             try:
                 card_id = int(input('Pick a card, typing its ID: '))
@@ -111,6 +113,10 @@ class Game(object):
                 print('Card #{} not found. Please type a valid ID!'.format(card_id))
                 continue
 
-    def player_confirm(self, idcard):
-        """TODO"""
-        return True
+    def player_confirm(self, idcard) -> bool:
+        """Ask player for confirmation."""
+        print('You selected %r.' % idcard)
+        response = input('Score this card for {} points? (y/N)'.format(
+            idcard.card.value(active_red=settings.PLAYER_IS_RED)
+        ))
+        return response in ('y', 'Y')
